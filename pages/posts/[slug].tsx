@@ -1,29 +1,44 @@
+import React from "react";
 import { useRouter } from "next/router";
-import { getPostBySlug, getAllPosts } from "../../lib/api";
+import useSWR, { SWRConfig } from "swr";
 import Head from "next/head";
-import markdownToHtml from "../../lib/markdownToHtml";
-import Meta from "../../lib/Meta";
 
 import type PostType from "../../interfaces/post";
 
-type Props = {
-  post: PostType;
+import { getPostBySlug, getAllPosts } from "../../lib/api";
+import markdownToHtml from "../../utils/markdownToHtml";
+import Meta from "../../lib/Meta";
+
+import fetcher from "../../utils/fetcher";
+
+const Article: React.FC = () => {
+  const { data } = useSWR<PostType>("/api/post", fetcher);
+
+  return (
+    <>
+      <Meta />
+      <Head>
+        <title>
+          {data.title} | {data.description}
+        </title>
+      </Head>
+      <div>{data.description}</div>
+      <div className="markdown">
+        <div dangerouslySetInnerHTML={{ __html: data.content }} />
+      </div>
+    </>
+  );
 };
 
-export default function Post({ post }: Props) {
+export default function Post({ fallback }) {
   const router = useRouter();
 
   return router.isFallback ? (
     <div>loading</div>
   ) : (
-    <>
-      <Meta />
-      <Head>
-        <title>{post.title} | Head with nextjs</title>
-      </Head>
-      <div>{post.description}</div>
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
-    </>
+    <SWRConfig value={{ fallback }}>
+      <Article />
+    </SWRConfig>
   );
 }
 
@@ -37,13 +52,11 @@ export async function getStaticProps({ params }: Params) {
   const post = getPostBySlug(params.slug, ["title", "date", "slug", "description", "content"]);
 
   const content = await markdownToHtml(post.content || "");
+  const postInfo = { ...post, content };
 
   return {
     props: {
-      post: {
-        ...post,
-        content,
-      },
+      fallback: { "/api/post": postInfo },
     },
   };
 }

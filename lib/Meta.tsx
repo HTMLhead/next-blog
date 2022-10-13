@@ -3,6 +3,7 @@ import Head from "next/head";
 const Meta = () => {
   return (
     <Head>
+      <link rel="stylesheet" href="/styles/markdown-styles.css" />
       <link rel="shortcut icon" href="/favicon/favicon.ico" />
       <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
       <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" />

@@ -1,0 +1,22 @@
+.markdown {
+  font-size: 1.6rem;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown blockquote {
+  margin: 0.6rem 0;
+}
+
+.markdown h2 {
+  font-size: 2.4rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.markdown h3 {
+  font-size: 2rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}

@@ -1,9 +1,10 @@
-import Head from "next/head";
+import { List, ListItem } from "@chakra-ui/react";
 // Component
 import Post from "../interfaces/post";
 // lib
 import { getAllPosts } from "../lib/api";
 import Meta from "../lib/Meta";
+import Header from "components/Header";
 
 type Props = {
   allPosts: Post[];
@@ -13,16 +14,17 @@ export default function Index({ allPosts }: Props) {
   return (
     <>
       <Meta />
-      <ul>
+      <Header />
+      <List>
         {allPosts.map((post) => (
-          <li key={post.slug}>
+          <ListItem color="gray.400" key={post.slug}>
             <a href={`posts/${post.slug}`}>
               <div>{post.title}</div>
             </a>
             <div>{post.description}</div>
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 }
